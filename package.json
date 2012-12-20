@@ -6,5 +6,8 @@
 		"grunt": "~0.3",
 		"grunt-mocha": "~0.1",
 		"grunt-contrib-coffee": "~0.3"
+	},
+	"scripts": {
+		"test": "grunt test"
 	}
 }
