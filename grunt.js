@@ -38,4 +38,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.loadNpmTasks('grunt-mocha');
 
+	grunt.registerTask('test', 'mocha');
+	grunt.registerTask('release', 'concat coffee mocha');
+	grunt.registerTask('default', 'release');
+
 };
