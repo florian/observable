@@ -19,10 +19,18 @@ module.exports = function (grunt) {
 					'lib/observable.js': 'lib/observable.coffee'
 				}
 			}
+		},
+
+		mocha: {
+			all: {
+				src: 'spec/index.html',
+				run: true
+			}
 		}
 
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-coffee');
+	grunt.loadNpmTasks('grunt-mocha');
 
 };
