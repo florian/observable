@@ -16,6 +16,12 @@
   })(Observable);
 
   describe('Observable', function() {
+    afterEach(function() {
+      return A.__observable = {
+        id: -1,
+        events: {}
+      };
+    });
     it('should be a property of window', function() {
       return expect(window).to.have.property('Observable');
     });

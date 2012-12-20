@@ -1,6 +1,11 @@
 class A extends Observable
 
 describe 'Observable', ->
+	afterEach ->
+		A.__observable =
+			id: -1
+			events: {}
+
 	it 'should be a property of window', ->
 		expect(window).to.have.property('Observable')
 
