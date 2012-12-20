@@ -26,6 +26,11 @@ module.exports = function (grunt) {
 				src: 'spec/index.html',
 				run: true
 			}
+		},
+
+		watch: {
+			files: ['lib/observable.coffee', 'spec/*'],
+			tasks: 'coffee'
 		}
 
 	});
