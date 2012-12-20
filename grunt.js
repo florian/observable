@@ -1,8 +1,5 @@
 module.exports = function (grunt) {
 
-	var lib = 'lib/observable.js';
-	var src = 'lib/observable.coffee';
-
 	grunt.initConfig({
 
 		meta: {
@@ -11,11 +8,21 @@ module.exports = function (grunt) {
 
 		concat: {
 			dist: {
-				src: ['<banner>', lib],
-				dest: lib
+				src: ['<banner>', 'lib/observable.js'],
+				dest: 'lib/observable.js'
+			}
+		},
+
+		coffee: {
+			compile: {
+				files: {
+					'lib/observable.js': 'lib/observable.coffee'
+				}
 			}
 		}
 
 	});
+
+	grunt.loadNpmTasks('grunt-contrib-coffee');
 
 };
