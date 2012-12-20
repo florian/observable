@@ -1,0 +1,9 @@
+{
+	"name": "Observable",
+	"version": "1.0.0",
+	"private": true,
+	"devDependencies": {
+		"grunt": "~0.3",
+		"grunt-mocha": "~0.1"
+	}
+}
