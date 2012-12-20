@@ -16,7 +16,8 @@ module.exports = function (grunt) {
 		coffee: {
 			compile: {
 				files: {
-					'lib/observable.js': 'lib/observable.coffee'
+					'lib/observable.js': 'lib/observable.coffee',
+					'spec/spec.js': 'spec/spec.coffee'
 				}
 			}
 		},
