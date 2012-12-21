@@ -105,12 +105,16 @@
         expect(called[0]).to.be["true"];
         return expect(called[1]).to.be["true"];
       });
-      return it('should pass the specified arguments', function() {
+      it('should pass the specified arguments', function() {
         A.on('a', function(one, two) {
           expect(one).to.eql([1, 2]);
           return expect(two).to.be["true"];
         });
         return A.trigger('a', [[1, 2], true]);
+      });
+      return it('should return the parent object', function() {
+        A.on('a', function() {});
+        return expect(A.trigger('a')).to.equal(A);
       });
     });
   });

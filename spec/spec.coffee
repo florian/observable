@@ -89,3 +89,8 @@ describe 'Observable', ->
 				expect(one).to.eql([1, 2])
 				expect(two).to.be.true
 			A.trigger 'a', [[1, 2], true]
+
+		it 'should return the parent object', ->
+			# REFACTOR
+			A.on 'a', ->
+			expect(A.trigger('a')).to.equal(A)
