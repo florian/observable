@@ -30,6 +30,10 @@ class Observable
 
 
 	@off: (ids) ->
+		ids = utils.toArray(ids)
+		for id in ids
+			topic = id.split(';')[0]
+			delete @__observable.events[topic][id]
 
 	@trigger: (id, args) ->
 
