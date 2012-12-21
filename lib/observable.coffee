@@ -15,11 +15,11 @@ class Observable
 			if utils.isArray(value) then value else [value]
 
 	@on: (topics, fn) ->
-		ids = []
 		if utils.isPlainObject(topics)
 			@on(topic, fn) for topic, fn of topics
 		else
 			topics = utils.toArray(topics)
+			ids = []
 			for topic in topics
 				@__observable.lastIds[topic] ||= 0
 				id = "#{topic};#{String(++@__observable.lastIds[topic])}"
