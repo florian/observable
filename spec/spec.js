@@ -38,13 +38,31 @@
         expect(ids[0]).to.contain('a;');
         return expect(ids[1]).to.contain('b;');
       });
-      return it('should add the events to the store when setting several topics', function() {
+      it('should add the events to the store when setting several topics', function() {
         var ids;
         ids = A.on(['a', 'b'], function() {});
         expect(events).to.have.property('a');
         expect(events.a[ids[0]]).to.be.a('function');
         expect(events).to.have.property('b');
         return expect(events.b[ids[1]]).to.be.a('function');
+      });
+      it('should add the events to the store when setting with an object', function() {
+        A.on({
+          a: function() {},
+          b: function() {}
+        });
+        expect(events).to.have.property('a');
+        return expect(events).to.have.property('b');
+      });
+      return it('should return an array of ids when setting several topics', function() {
+        var ids;
+        ids = A.on({
+          a: function() {},
+          b: function() {}
+        });
+        expect(ids).to.be.an('array');
+        expect(ids[0]).to.contain('a;');
+        return expect(ids[1]).to.contain('b;');
       });
     });
     describe('off', function() {
