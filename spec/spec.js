@@ -1,15 +1,15 @@
 (function() {
-  var A, events, id;
+  var A, events, lastIds;
 
   A = $.extend(true, Observable);
 
-  id = A.__observable.id;
+  lastIds = A.__observable.lastIds;
 
   events = A.__observable.events;
 
   describe('Observable', function() {
     afterEach(function() {
-      id = A.__observable.id = -1;
+      lastIds = A.__observable.lastIds = {};
       return events = A.__observable.events = {};
     });
     it('should be a property of window', function() {
@@ -20,22 +20,31 @@
         return expect(A.on).to.be.a('function');
       });
       it('should return an id when setting one topic', function() {
+        var id;
         id = A.on('a', function() {});
-        return expect(id).to.be.a('string');
+        expect(id).to.be.a('string');
+        return expect(id).to.contain('a;');
       });
       it('should add the event to the store when setting one topic', function() {
-        A.on('a', function() {});
-        return expect(events).to.have.property('a');
+        var id;
+        id = A.on('a', function() {});
+        expect(events).to.have.property('a');
+        return expect(events.a[id]).to.be.a('function');
       });
       it('should return an array of ids when setting several topics', function() {
         var ids;
         ids = A.on(['a', 'b'], function() {});
-        return expect(ids).to.be.an('array');
+        expect(ids).to.be.an('array');
+        expect(ids[0]).to.contain('a;');
+        return expect(ids[1]).to.contain('b;');
       });
-      return it('should add the events to the store ids when setting several topics', function() {
-        A.on(['a', 'b'], function() {});
+      return it('should add the events to the store when setting several topics', function() {
+        var ids;
+        ids = A.on(['a', 'b'], function() {});
         expect(events).to.have.property('a');
-        return expect(events).to.have.property('b');
+        expect(events.a[ids[0]]).to.be.a('function');
+        expect(events).to.have.property('b');
+        return expect(events.b[ids[1]]).to.be.a('function');
       });
     });
     describe('off', function() {
