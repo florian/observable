@@ -70,3 +70,17 @@ describe 'Observable', ->
 	describe 'trigger', ->
 		it 'should be a function', ->
 			expect(A.trigger).to.be.a('function')
+
+		it 'should trigger all the functions that are subscribed to the topic', ->
+			called = [false, false]
+			A.on 'a', -> called[0] = true
+			A.on 'a', -> called[1] = true
+			A.trigger 'a'
+			expect(called[0]).to.be.true
+			expect(called[1]).to.be.true
+
+		it 'should pass the specified arguments', ->
+			A.on 'a', (one, two) ->
+				expect(one).to.eql([1, 2])
+				expect(two).to.be.true
+			A.trigger 'a', [[1, 2], true]

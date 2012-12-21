@@ -84,8 +84,28 @@
       });
     });
     return describe('trigger', function() {
-      return it('should be a function', function() {
+      it('should be a function', function() {
         return expect(A.trigger).to.be.a('function');
+      });
+      it('should trigger all the functions that are subscribed to the topic', function() {
+        var called;
+        called = [false, false];
+        A.on('a', function() {
+          return called[0] = true;
+        });
+        A.on('a', function() {
+          return called[1] = true;
+        });
+        A.trigger('a');
+        expect(called[0]).to.be["true"];
+        return expect(called[1]).to.be["true"];
+      });
+      return it('should pass the specified arguments', function() {
+        A.on('a', function(one, two) {
+          expect(one).to.eql([1, 2]);
+          return expect(two).to.be["true"];
+        });
+        return A.trigger('a', [[1, 2], true]);
       });
     });
   });
