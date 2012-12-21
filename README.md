@@ -68,3 +68,11 @@ $.on('topic', function (arg1, arg2) {
 });
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
+
+## Chaining
+
+`trigger` and `off` return the parent object so you can use chaining.
+
+```js
+$.trigger('topic').off('topic');
+```
