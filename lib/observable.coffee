@@ -8,10 +8,17 @@ class Observable
 		isPlainObject: (value) ->
 			!!value && Object::toString.call(value) == '[object Object]'
 
-	@on: (topics..., fn) ->
+		isArray: (value) ->
+			Object::toString.call(value) == '[object Array]'
+
+		toArray: (value) ->
+			if utils.isArray(value) then value else [value]
+
+	@on: (topics, fn) ->
 		if utils.isPlainObject(topics[0])
 			console.log(true)
 		else
+			topics = utils.toArray(topics)
 			ids = []
 			for topic in topics
 				id = String(++@__observable.id)
