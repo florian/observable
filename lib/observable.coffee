@@ -34,6 +34,7 @@ class Observable
 		for id in ids
 			topic = id.split(';')[0]
 			delete @__observable.events[topic][id]
+		@
 
 	@trigger: (topic, args) ->
 		fn(args...) for id, fn of @__observable.events[topic]
