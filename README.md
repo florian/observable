@@ -69,6 +69,21 @@ $.on('topic', function (arg1, arg2) {
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
 
+## Stop observing events: `off`
+
+This method accepts either a single ID or an array of ID. That means you can just pass in the return value of any `.on` call.
+
+```js
+$.off(id);
+$.off([id1, id2]);
+
+id3 = $.on('a', function () {});
+$.off(id3); // Removes the event above.
+
+ids = $.on(['a', 'b'], function () {});
+$.off(ids); // Removes the two events above.
+```
+
 ## Chaining
 
 `trigger` and `off` return the parent object so you can use chaining.
