@@ -66,8 +66,21 @@
       });
     });
     describe('off', function() {
-      return it('should be a function', function() {
+      it('should be a function', function() {
         return expect(A.off).to.be.a('function');
+      });
+      it('should be able to remove a single topic', function() {
+        var id;
+        id = A.on('a', function() {});
+        A.off(id);
+        return expect(events.a).to.not.have.property(id);
+      });
+      return it('should remove an array of ids', function() {
+        var ids;
+        ids = A.on(['a', 'b'], function() {});
+        A.off(ids);
+        expect(events.a).to.not.have.property(ids[0]);
+        return expect(events.b).to.not.have.property(ids[1]);
       });
     });
     return describe('trigger', function() {

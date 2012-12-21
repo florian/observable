@@ -56,6 +56,17 @@ describe 'Observable', ->
 		it 'should be a function', ->
 			expect(A.off).to.be.a('function')
 
+		it 'should be able to remove a single topic', ->
+			id = A.on 'a', ->
+			A.off id
+			expect(events.a).to.not.have.property(id)
+
+		it 'should remove an array of ids', ->
+			ids = A.on ['a', 'b'], ->
+			A.off ids
+			expect(events.a).to.not.have.property(ids[0])
+			expect(events.b).to.not.have.property(ids[1])
+
 	describe 'trigger', ->
 		it 'should be a function', ->
 			expect(A.trigger).to.be.a('function')
