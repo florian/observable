@@ -1,31 +1,27 @@
 (function() {
-  var A,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var A, events, id;
 
-  A = (function(_super) {
+  A = $.extend(true, {}, Observable);
 
-    __extends(A, _super);
+  id = A.__observable.id;
 
-    function A() {
-      return A.__super__.constructor.apply(this, arguments);
-    }
-
-    return A;
-
-  })(Observable);
+  events = A.__observable.events;
 
   describe('Observable', function() {
     afterEach(function() {
-      A.__observable.id = -1;
-      return A.__observable.events = {};
+      id = A.__observable.id = -1;
+      return events = A.__observable.events = {};
     });
     it('should be a property of window', function() {
       return expect(window).to.have.property('Observable');
     });
     describe('on', function() {
-      return it('should be a function', function() {
+      it('should be a function', function() {
         return expect(A.on).to.be.a('function');
+      });
+      return it('should add events to the store', function() {
+        A.on('a', function() {});
+        return expect(events).to.have.property('a');
       });
     });
     describe('off', function() {
