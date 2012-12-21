@@ -38,6 +38,7 @@ class Observable
 
 	@trigger: (topic, args) ->
 		fn(args...) for id, fn of @__observable.events[topic]
+		@
 
 
 if typeof define is 'function' and define.amd
