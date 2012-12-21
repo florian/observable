@@ -1,7 +1,7 @@
 class Observable
 
 	@__observable:
-		id: -1
+		lastIds: {}
 		events: {}
 
 	utils =
@@ -21,7 +21,8 @@ class Observable
 			topics = utils.toArray(topics)
 			ids = []
 			for topic in topics
-				id = String(++@__observable.id)
+				@__observable.lastIds[topic] ||= 0
+				id = "#{topic};#{String(++@__observable.lastIds[topic])}"
 				ids.push(id)
 				@__observable.events[topic] ||= {}
 				@__observable.events[topic][id] = fn
