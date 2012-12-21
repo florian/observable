@@ -1,7 +1,7 @@
 (function() {
   var A, events, id;
 
-  A = $.extend(true, {}, Observable);
+  A = $.extend(true, Observable);
 
   id = A.__observable.id;
 
@@ -19,7 +19,11 @@
       it('should be a function', function() {
         return expect(A.on).to.be.a('function');
       });
-      return it('should add events to the store', function() {
+      it('should return an id when setting one topic', function() {
+        id = A.on('a', function() {});
+        return expect(id).to.be.a('string');
+      });
+      return it('should add the event to the store when setting one topic', function() {
         A.on('a', function() {});
         return expect(events).to.have.property('a');
       });

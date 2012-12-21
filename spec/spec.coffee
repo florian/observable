@@ -1,4 +1,4 @@
-A = $.extend(true, {}, Observable)
+A = $.extend(true, Observable)
 id = A.__observable.id
 events = A.__observable.events
 
@@ -14,7 +14,11 @@ describe 'Observable', ->
 		it 'should be a function', ->
 			expect(A.on).to.be.a('function')
 
-		it 'should add events to the store', ->
+		it 'should return an id when setting one topic', ->
+			id = A.on 'a', ->
+			expect(id).to.be.a('string')
+
+		it 'should add the event to the store when setting one topic', ->
 			A.on 'a', ->
 			expect(events).to.have.property('a')
 
