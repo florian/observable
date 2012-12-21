@@ -67,6 +67,11 @@ describe 'Observable', ->
 			expect(events.a).to.not.have.property(ids[0])
 			expect(events.b).to.not.have.property(ids[1])
 
+		it 'should return the parent object', ->
+			# REFACTOR
+			id = A.on 'a', ->
+			expect(A.off(id)).to.equal(A)
+
 	describe 'trigger', ->
 		it 'should be a function', ->
 			expect(A.trigger).to.be.a('function')
