@@ -4,7 +4,22 @@ class Observable
 		id: -1
 		events: {}
 
-	@on: ->
+	utils =
+		isPlainObject: (value) ->
+			!!value && Object::toString.call(value) == '[object Object]'
+
+	@on: (topics..., fn) ->
+		if utils.isPlainObject(topics[0])
+			console.log(true)
+		else
+			ids = []
+			for topic in topics
+				id = String(++@__observable.id)
+				ids.push(id)
+				@__observable.events[topic] ||= {}
+				@__observable.events[topic][id] = fn
+		if ids.length is 1 then ids[0] else ids
+
 
 	@off: (ids) ->
 
