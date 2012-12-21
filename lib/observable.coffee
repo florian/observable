@@ -35,7 +35,8 @@ class Observable
 			topic = id.split(';')[0]
 			delete @__observable.events[topic][id]
 
-	@trigger: (id, args) ->
+	@trigger: (topic, args) ->
+		fn(args...) for id, fn of @__observable.events[topic]
 
 
 if typeof define is 'function' and define.amd
