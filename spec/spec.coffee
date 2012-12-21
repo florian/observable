@@ -22,6 +22,15 @@ describe 'Observable', ->
 			A.on 'a', ->
 			expect(events).to.have.property('a')
 
+		it 'should return an array of ids when setting several topics', ->
+			ids = A.on ['a', 'b'], ->
+			expect(ids).to.be.an('array')
+
+		it 'should add the events to the store ids when setting several topics', ->
+			A.on ['a', 'b'], ->
+			expect(events).to.have.property('a')
+			expect(events).to.have.property('b')
+
 	describe 'off', ->
 		it 'should be a function', ->
 			expect(A.off).to.be.a('function')

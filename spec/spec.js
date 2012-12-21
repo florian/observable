@@ -23,9 +23,19 @@
         id = A.on('a', function() {});
         return expect(id).to.be.a('string');
       });
-      return it('should add the event to the store when setting one topic', function() {
+      it('should add the event to the store when setting one topic', function() {
         A.on('a', function() {});
         return expect(events).to.have.property('a');
+      });
+      it('should return an array of ids when setting several topics', function() {
+        var ids;
+        ids = A.on(['a', 'b'], function() {});
+        return expect(ids).to.be.an('array');
+      });
+      return it('should add the events to the store ids when setting several topics', function() {
+        A.on(['a', 'b'], function() {});
+        expect(events).to.have.property('a');
+        return expect(events).to.have.property('b');
       });
     });
     describe('off', function() {
