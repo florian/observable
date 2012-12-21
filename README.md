@@ -23,22 +23,28 @@ This mixin requires you to copy it deeply.
 ## Observing events: `on`
 
 You can watch a single event:
+
 ```js
 var id = $.on('topic', function () {});
 ```
+
 This will return a unique ID that you can use to stop observing the event, see `off` later.
 
 You can watch several events at once:
+
 ```js
 var ids = $.on(['topic1', 'topic2'], function () {});
 ```
+
 This will return an array of IDs.
 
 You can watch several events at once that need different handlers:
+
 ```js
 var ids = $.on({
 	topic1: function () {},
 	topic2: function () {}
 });
 ```
+
 This will also return an array of IDs.
