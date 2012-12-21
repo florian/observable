@@ -48,3 +48,23 @@ var ids = $.on({
 ```
 
 This will also return an array of IDs.
+
+## Triggering events: `trigger`
+
+Calling `.trigger('topic')` will execute all function subscribed to that topic.
+
+```
+$.on('topic', function () {
+	console.log('topic called');
+});
+$.trigger('topic'); // Logs 'topic called'
+```
+
+You can also pass arguments to the subscribed functions by adding an array as the second argument:
+
+```js
+$.on('topic', function (arg1, arg2) {
+	console.log(arg1, arg2);
+});
+$.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
+```
