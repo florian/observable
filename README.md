@@ -65,6 +65,16 @@ $.on('topic', function (arg1, arg2) {
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
 
+### `once`
+
+The `once` method behaves exactly like `on` and accepts the same arguments, but after triggering the event for the first time the event will be removed.
+
+```js
+$.once('topic', fn);
+$.trigger('topic'); // fn will be triggered
+$.trigger('topic'); // fn won't be triggered, event doesn't exist anymore
+```
+
 ## `off`: unsubscribe events
 
 This method accepts either a single ID or an array of IDs. That means you can just pass in the return value of any `.on` call.
