@@ -39,11 +39,22 @@ You can watch several events at once that need different handlers:
 ```js
 var ids = $.on({
   topic1: fn,
-	topic2: fn
+  topic2: fn
 });
 ```
 
 This will also return an array of IDs.
+
+
+### `once`
+
+The `once` method behaves exactly like `on` and accepts the same arguments, but after triggering the event for the first time the event will be removed.
+
+```js
+$.once('topic', fn);
+$.trigger('topic'); // fn will be triggered
+$.trigger('topic'); // fn won't be triggered, event doesn't exist anymore
+```
 
 ## `trigger`: triggering events
 
@@ -63,16 +74,6 @@ $.on('topic', function (arg1, arg2) {
 	console.log(arg1, arg2);
 });
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
-```
-
-### `once`
-
-The `once` method behaves exactly like `on` and accepts the same arguments, but after triggering the event for the first time the event will be removed.
-
-```js
-$.once('topic', fn);
-$.trigger('topic'); // fn will be triggered
-$.trigger('topic'); // fn won't be triggered, event doesn't exist anymore
 ```
 
 ## `off`: unsubscribe events
