@@ -95,6 +95,10 @@ describe 'Observable', ->
 				expect(two).to.be.true
 			A.trigger 'a', [[1, 2], true]
 
+		it 'should not throw an error when passing a non-existing topic', ->
+			expect(-> A.trigger()).not.to.throw(Error)
+			expect(-> A.trigger("non-existing topic")).not.to.throw(Error)
+
 		it 'should return the parent object', ->
 			expect(A.trigger()).to.equal(A)
 

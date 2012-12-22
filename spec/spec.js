@@ -120,6 +120,14 @@
         });
         return A.trigger('a', [[1, 2], true]);
       });
+      it('should not throw an error when passing a non-existing topic', function() {
+        expect(function() {
+          return A.trigger();
+        }).not.to["throw"](Error);
+        return expect(function() {
+          return A.trigger("non-existing topic");
+        }).not.to["throw"](Error);
+      });
       return it('should return the parent object', function() {
         var id;
         expect(A.trigger()).to.equal(A);
