@@ -14,7 +14,7 @@ describe 'Observable', ->
 		it 'should be a function', ->
 			expect(A.on).to.be.a('function')
 
-		it 'should return an id when setting one topic', ->
+		it 'should return an ID when setting one topic', ->
 			id = A.on 'a', ->
 			expect(id).to.be.a('string')
 			expect(id).to.contain('a;')
@@ -59,13 +59,22 @@ describe 'Observable', ->
 		it 'should be able to remove a single topic', ->
 			id = A.on 'a', ->
 			A.off id
-			expect(events.a).to.not.have.property(id)
+			expect(events.a).not.to.have.property(id)
 
 		it 'should remove an array of ids', ->
 			ids = A.on ['a', 'b'], ->
 			A.off ids
-			expect(events.a).to.not.have.property(ids[0])
-			expect(events.b).to.not.have.property(ids[1])
+			expect(events.a).not.to.have.property(ids[0])
+			expect(events.b).not.to.have.property(ids[1])
+
+		it 'should not throw an error when passing an unknown ID', ->
+				expect(A.off).not.to.throw(Error)
+				expect(-> A.off('unknown ID')).not.to.throw(Error)
+
+		it 'should work even if the topic contains a semicolon', ->
+			id = A.on 'to;pic', ->
+			A.off id
+			expect(events['to;pic']).not.to.have.key(id)
 
 		it 'should return the parent object', ->
 			# REFACTOR

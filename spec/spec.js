@@ -19,7 +19,7 @@
       it('should be a function', function() {
         return expect(A.on).to.be.a('function');
       });
-      it('should return an id when setting one topic', function() {
+      it('should return an ID when setting one topic', function() {
         var id;
         id = A.on('a', function() {});
         expect(id).to.be.a('string');
@@ -73,14 +73,26 @@
         var id;
         id = A.on('a', function() {});
         A.off(id);
-        return expect(events.a).to.not.have.property(id);
+        return expect(events.a).not.to.have.property(id);
       });
       it('should remove an array of ids', function() {
         var ids;
         ids = A.on(['a', 'b'], function() {});
         A.off(ids);
-        expect(events.a).to.not.have.property(ids[0]);
-        return expect(events.b).to.not.have.property(ids[1]);
+        expect(events.a).not.to.have.property(ids[0]);
+        return expect(events.b).not.to.have.property(ids[1]);
+      });
+      it('should not throw an error when passing an unknown ID', function() {
+        expect(A.off).not.to["throw"](Error);
+        return expect(function() {
+          return A.off('unknown ID');
+        }).not.to["throw"](Error);
+      });
+      it('should work even if the topic contains a semicolon', function() {
+        var id;
+        id = A.on('to;pic', function() {});
+        A.off(id);
+        return expect(events['to;pic']).not.to.have.key(id);
       });
       return it('should return the parent object', function() {
         var id;
