@@ -1,7 +1,7 @@
 (function() {
   var A, events, lastIds;
 
-  A = $.extend(true, Observable);
+  A = new Observable;
 
   lastIds = A.__observable.lastIds;
 

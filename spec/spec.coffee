@@ -1,4 +1,4 @@
-A = $.extend(true, Observable)
+A = new Observable
 lastIds = A.__observable.lastIds
 events = A.__observable.events
 
