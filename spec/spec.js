@@ -80,10 +80,20 @@
         expect(events.a).to.not.have.property(ids[0]);
         return expect(events.b).to.not.have.property(ids[1]);
       });
-      return it('should return the parent object', function() {
+      it('should not throw an error when passing a non-existing topic', function() {
+        expect(A.off).not.to["throw"](Error);
+        return expect(function() {
+          return A.off('non-existing ID');
+        }).not.to["throw"](Error);
+      });
+      it('should work with topics that contain semicolons', function() {
         var id;
-        id = A.on('a', function() {});
-        return expect(A.off(id)).to.equal(A);
+        id = A.on('to;pic', function() {});
+        A.off(id);
+        return expect(events['to;pic']).not.to.have.property(id);
+      });
+      return it('should return the parent object', function() {
+        return expect(A.off()).to.equal(A);
       });
     });
     return describe('trigger', function() {
@@ -111,8 +121,10 @@
         return A.trigger('a', [[1, 2], true]);
       });
       return it('should return the parent object', function() {
-        A.on('a', function() {});
-        return expect(A.trigger('a')).to.equal(A);
+        var id;
+        expect(A.trigger()).to.equal(A);
+        id = A.on('a', function() {});
+        return expect(A.trigger(id)).to.equal(A);
       });
     });
   });

@@ -65,10 +65,17 @@ describe 'Observable', ->
 			expect(events.a).to.not.have.property(ids[0])
 			expect(events.b).to.not.have.property(ids[1])
 
+		it 'should not throw an error when passing a non-existing topic', ->
+			expect(A.off).not.to.throw(Error)
+			expect(-> A.off('non-existing ID')).not.to.throw(Error)
+
+		it 'should work with topics that contain semicolons', ->
+			id = A.on 'to;pic', ->
+			A.off(id)
+			expect(events['to;pic']).not.to.have.property(id)
+
 		it 'should return the parent object', ->
-			# REFACTOR
-			id = A.on 'a', ->
-			expect(A.off(id)).to.equal(A)
+			expect(A.off()).to.equal(A)
 
 	describe 'trigger', ->
 		it 'should be a function', ->
@@ -89,6 +96,7 @@ describe 'Observable', ->
 			A.trigger 'a', [[1, 2], true]
 
 		it 'should return the parent object', ->
-			# REFACTOR
-			A.on 'a', ->
-			expect(A.trigger('a')).to.equal(A)
+			expect(A.trigger()).to.equal(A)
+
+			id = A.on 'a', ->
+			expect(A.trigger(id)).to.equal(A)
