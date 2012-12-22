@@ -33,8 +33,9 @@ class Observable
 	off: (ids) ->
 		ids = utils.toArray(ids)
 		for id in ids
-			topic = id.split(';')[0]
-			delete @__observable.events[topic][id]
+			continue if typeof id isnt 'string'
+			topic = id.substr(0, id.lastIndexOf(';'))
+			delete @__observable.events[topic][id] if @__observable.events[topic]? and @__observable.events[topic][id]?
 		@
 
 	trigger: (topic, args) ->
@@ -44,7 +45,7 @@ class Observable
 
 if typeof define is 'function' and define.amd
 	define -> Observable
-else if typeof exports is not 'undefined'
+else if typeof exports isnt 'undefined'
 	module.exports = Observable
 else
 	window.Observable = Observable
