@@ -32,17 +32,15 @@ describe 'Observable', ->
 
 		it 'should add the events to the store when setting several topics', ->
 			ids = A.on ['a', 'b'], ->
-			expect(events).to.have.property('a')
+			expect(events).to.have.keys('a', 'b')
 			expect(events.a[ids[0]]).to.be.a('function')
-			expect(events).to.have.property('b')
 			expect(events.b[ids[1]]).to.be.a('function')
 
 		it 'should add the events to the store when setting with an object', ->
 			A.on
 				a: ->
 				b: ->
-			expect(events).to.have.property('a')
-			expect(events).to.have.property('b')
+			expect(events).to.have.keys('a', 'b')
 
 		it 'should return an array of ids when setting several topics', ->
 			ids = A.on

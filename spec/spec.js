@@ -41,9 +41,8 @@
       it('should add the events to the store when setting several topics', function() {
         var ids;
         ids = A.on(['a', 'b'], function() {});
-        expect(events).to.have.property('a');
+        expect(events).to.have.keys('a', 'b');
         expect(events.a[ids[0]]).to.be.a('function');
-        expect(events).to.have.property('b');
         return expect(events.b[ids[1]]).to.be.a('function');
       });
       it('should add the events to the store when setting with an object', function() {
@@ -51,8 +50,7 @@
           a: function() {},
           b: function() {}
         });
-        expect(events).to.have.property('a');
-        return expect(events).to.have.property('b');
+        return expect(events).to.have.keys('a', 'b');
       });
       return it('should return an array of ids when setting several topics', function() {
         var ids;
