@@ -63,6 +63,13 @@
         return expect(ids[1]).to.contain('b;');
       });
     });
+    describe('once', function() {
+      return it('should return an ID that ends with " once"', function() {
+        var id;
+        id = A.once('a', function() {});
+        return expect(id).to.match(/\ once/);
+      });
+    });
     describe('off', function() {
       it('should be a function', function() {
         return expect(A.off).to.be.a('function');
@@ -91,6 +98,12 @@
         id = A.on('to;pic', function() {});
         A.off(id);
         return expect(events['to;pic']).not.to.have.property(id);
+      });
+      it('should be able to remove topics that were set using once', function() {
+        var id;
+        id = A.once('a', function() {});
+        A.off(id);
+        return expect(events.a).not.to.have.property(id);
       });
       return it('should return the parent object', function() {
         return expect(A.off()).to.equal(A);
@@ -127,6 +140,12 @@
         return expect(function() {
           return A.trigger("non-existing topic");
         }).not.to["throw"](Error);
+      });
+      it('should remove topics set using once after firing them', function() {
+        var id;
+        id = A.once('a', function() {});
+        A.trigger('a');
+        return expect(events).not.to.have.property(id);
       });
       return it('should return the parent object', function() {
         var id;

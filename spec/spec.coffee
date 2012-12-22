@@ -50,6 +50,11 @@ describe 'Observable', ->
 			expect(ids[0]).to.contain('a;')
 			expect(ids[1]).to.contain('b;')
 
+	describe 'once', ->
+		it 'should return an ID that ends with " once"', ->
+			id = A.once 'a', ->
+			expect(id).to.match(/\ once/)
+
 	describe 'off', ->
 		it 'should be a function', ->
 			expect(A.off).to.be.a('function')
@@ -73,6 +78,11 @@ describe 'Observable', ->
 			id = A.on 'to;pic', ->
 			A.off(id)
 			expect(events['to;pic']).not.to.have.property(id)
+
+		it 'should be able to remove topics that were set using once', ->
+			id = A.once 'a', ->
+			A.off(id)
+			expect(events.a).not.to.have.property(id)
 
 		it 'should return the parent object', ->
 			expect(A.off()).to.equal(A)
@@ -98,6 +108,11 @@ describe 'Observable', ->
 		it 'should not throw an error when passing a non-existing topic', ->
 			expect(-> A.trigger()).not.to.throw(Error)
 			expect(-> A.trigger("non-existing topic")).not.to.throw(Error)
+
+		it 'should remove topics set using once after firing them', ->
+			id = A.once 'a', ->
+			A.trigger 'a'
+			expect(events).not.to.have.property(id)
 
 		it 'should return the parent object', ->
 			expect(A.trigger()).to.equal(A)
