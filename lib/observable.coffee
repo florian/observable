@@ -39,6 +39,7 @@ class Observable
 		@
 
 	trigger: (topic, args) ->
+		return @ unless @__observable.events[topic]?
 		fn(args...) for id, fn of @__observable.events[topic]
 		@
 
