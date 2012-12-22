@@ -1,39 +1,35 @@
-# **Beta**: Observable – A JavaScript event system
-
-**This is beta. I'm still working on the documentation.**
+# Observable – A JavaScript event system
 
 Observable is a JavaScript mixin for adding observer methods to a function. It's similiar to the jQuery event system, but works with IDs.
 
-**Todo:
-
 ## Usage
 
-You find the source at *lib/observable.js*. Observable supports AMD and CommonJS. If no AMD or CommonJS loader is present, it will be assigned to the global scope.
+You find the source at *lib/observable.js*. Observable supports AMD and CommonJS. Unless a AMD or CommonJS loader is present, it will be assigned to the global scope.
 
 ```js
 var $ = new Observable;
 ```
 
-Now, `$` has all of the Observable methods that are described in the following.
+The methods that `$` gains are described in the following documentation.
 
 - - -
 
 # Documentation
 
-## Observing events: `on`
+## `on`: subscribing to events
 
 You can watch a single event:
 
 ```js
-var id = $.on('topic', function () {});
+var id = $.on('topic', fn);
 ```
 
 This will return a unique ID that you can use to stop observing the event, see `off` later.
 
-You can watch several events at once:
+You can also watch several events at once:
 
 ```js
-var ids = $.on(['topic1', 'topic2'], function () {});
+var ids = $.on(['topic1', 'topic2'], fn);
 ```
 
 This will return an array of IDs.
@@ -42,16 +38,16 @@ You can watch several events at once that need different handlers:
 
 ```js
 var ids = $.on({
-	topic1: function () {},
-	topic2: function () {}
+  topic1: fn,
+	topic2: fn
 });
 ```
 
 This will also return an array of IDs.
 
-## Triggering events: `trigger`
+## `trigger`: triggering events
 
-Calling `.trigger('topic')` will execute all function subscribed to that topic.
+Calling `.trigger('topic')` will execute all function subscribed to `'topic'`.
 
 ```
 $.on('topic', function () {
@@ -60,7 +56,7 @@ $.on('topic', function () {
 $.trigger('topic'); // Logs 'topic called'
 ```
 
-You can also pass arguments to the subscribed functions by adding an array as the second argument:
+You can also pass arguments to the subscribed functions by passing an array as the second argument:
 
 ```js
 $.on('topic', function (arg1, arg2) {
@@ -69,18 +65,18 @@ $.on('topic', function (arg1, arg2) {
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
 
-## Stop observing events: `off`
+## `off`: unsubscribe events
 
-This method accepts either a single ID or an array of ID. That means you can just pass in the return value of any `.on` call.
+This method accepts either a single ID or an array of IDs. That means you can just pass in the return value of any `.on` call.
 
 ```js
 $.off(id);
-$.off([id1, id2]);
+$.off([id, id2]);
 
-id3 = $.on('a', function () {});
+var id3 = $.on('a', fn);
 $.off(id3); // Removes the event above.
 
-ids = $.on(['a', 'b'], function () {});
+var ids = $.on(['a', 'b'], fn);
 $.off(ids); // Removes the two events above.
 ```
 
