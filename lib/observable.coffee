@@ -52,7 +52,7 @@ class Observable
 
 
 if typeof define is 'function' and define.amd
-	define -> Observable
+	define 'observable', -> Observable
 else if typeof exports isnt 'undefined'
 	module.exports = Observable
 else
