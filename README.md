@@ -4,13 +4,20 @@ Observable is a JavaScript mixin for adding observer methods to a function. It's
 
 ## Usage
 
-You find the source at *lib/observable.js*. Observable supports AMD and CommonJS. Unless a AMD or CommonJS loader is present, it will be assigned to the global scope.
+You find the source at *[lib/observable.js](blob/master/lib/observable.js)*. Observable will be assigned to the global scope unless an AMD or CommonJS loader is present.
 
 ```js
-var $ = new Observable;
+// Mixin the methods
+Observable(Something)
+
+// Or mixin to the prototype
+Observable(Something.prototype)
+
+// Or create a new fresh object with the methods
+var $ = Observable()
 ```
 
-The methods that `$` gains are described in the following documentation.
+The methods that are added, are described in the following documentation. For convention the object that receives the new methods will be called `$`.
 
 - - -
 
