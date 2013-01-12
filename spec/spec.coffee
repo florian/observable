@@ -1,6 +1,13 @@
-A = new Observable
+A = Observable()
 lastIds = A.__observable.lastIds
 events = A.__observable.events
+
+eventSystemAvailable = (obj) ->
+	expect(obj).to.have.property('__observable')
+	expect(obj.on).to.be.a('function')
+	expect(obj.once).to.be.a('function')
+	expect(obj.trigger).to.be.a('function')
+	expect(obj.off).to.be.a('function')
 
 describe 'Observable', ->
 	afterEach ->
@@ -9,6 +16,17 @@ describe 'Observable', ->
 
 	it 'should be a property of window', ->
 		expect(window).to.have.property('Observable')
+
+	describe 'constructor', ->
+		it 'should create a fresh object when passing 0 arguments', ->
+			_ = Observable()
+			expect(_).to.satisfy(eventSystemAvailable)
+
+		it 'should mixin the properties when passing in an object', ->
+			_ = a: 1
+			Observable(_)
+			expect(_).to.satisfy(eventSystemAvailable)
+			expect(_).to.have.property('a', 1)
 
 	describe 'on', ->
 		it 'should be a function', ->

@@ -1,11 +1,19 @@
 (function() {
-  var A, events, lastIds;
+  var A, eventSystemAvailable, events, lastIds;
 
-  A = new Observable;
+  A = Observable();
 
   lastIds = A.__observable.lastIds;
 
   events = A.__observable.events;
+
+  eventSystemAvailable = function(obj) {
+    expect(obj).to.have.property('__observable');
+    expect(obj.on).to.be.a('function');
+    expect(obj.once).to.be.a('function');
+    expect(obj.trigger).to.be.a('function');
+    return expect(obj.off).to.be.a('function');
+  };
 
   describe('Observable', function() {
     afterEach(function() {
@@ -14,6 +22,22 @@
     });
     it('should be a property of window', function() {
       return expect(window).to.have.property('Observable');
+    });
+    describe('constructor', function() {
+      it('should create a fresh object when passing 0 arguments', function() {
+        var _;
+        _ = Observable();
+        return expect(_).to.satisfy(eventSystemAvailable);
+      });
+      return it('should mixin the properties when passing in an object', function() {
+        var _;
+        _ = {
+          a: 1
+        };
+        Observable(_);
+        expect(_).to.satisfy(eventSystemAvailable);
+        return expect(_).to.have.property('a', 1);
+      });
     });
     describe('on', function() {
       it('should be a function', function() {
