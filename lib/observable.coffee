@@ -10,10 +10,13 @@ class Observable
 		toArray: (value) ->
 			if utils.isArray(value) then value else [value]
 
-	constructor: ->
-		@__observable =
+	constructor: (host = {}) ->
+		host.__observable =
 			lastIds: {}
 			events: {}
+			ids: []
+		host[key] = fn for key, fn of Observable.prototype
+		return host
 
 	on: (topics, fn, once) ->
 		if utils.isPlainObject(topics)
@@ -43,8 +46,6 @@ class Observable
 		@
 
 	trigger: (topic, args) ->
-		return @ unless @__observable.events[topic]?
-
 		for id, fn of @__observable.events[topic]
 			fn(args...)
 			@off(id) if id.lastIndexOf(' once') is id.length - 1
