@@ -57,12 +57,23 @@
         expect(events.a[ids[0]]).to.be.a('function');
         return expect(events.b[ids[1]]).to.be.a('function');
       });
-      return it('should add the events to the store when setting with an object', function() {
+      it('should add the events to the store when setting with an object', function() {
         A.on({
           a: function() {},
           b: function() {}
         });
         return expect(events).to.have.keys('a', 'b');
+      });
+      it('should return the parent object with a special ids property', function() {
+        var ret;
+        ret = A.on('a', function() {});
+        return expect(ret.__observable).to.have.property('ids')["with"].length(1);
+      });
+      return it('should return the parent object with only the recent IDs', function() {
+        var ret;
+        A.on(['a', 'b'], function() {});
+        ret = A.on('c', function() {});
+        return expect(ret.__observable).to.have.property('ids')["with"].length(1);
       });
     });
     describe('once', function() {

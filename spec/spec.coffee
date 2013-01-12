@@ -51,6 +51,15 @@ describe 'Observable', ->
 				b: ->
 			expect(events).to.have.keys('a', 'b')
 
+		it 'should return the parent object with a special ids property', ->
+			ret = A.on 'a', ->
+			expect(ret.__observable).to.have.property('ids').with.length(1)
+
+		it 'should return the parent object with only the recent IDs', ->
+			A.on ['a', 'b'], ->
+			ret = A.on 'c', ->
+			expect(ret.__observable).to.have.property('ids').with.length(1)
+
 	describe 'once', ->
 		it 'should return an ID that ends with " once"', ->
 			id = A.once 'a', ->
