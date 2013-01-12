@@ -24,25 +24,25 @@ class Observable
 			@on(topic, fn, once) for topic, fn of topics
 		else
 			topics = utils.toArray(topics)
-			ids = []
 			for topic in topics
 				@__observable.lastIds[topic] ||= 0
-				id = "#{topic};#{String(++@__observable.lastIds[topic])}"
+				id = "#{topic};#{++@__observable.lastIds[topic]}"
 				id += ' once' if once
-				ids.push(id)
+				@__observable.ids.push(id)
 				@__observable.events[topic] ||= {}
 				@__observable.events[topic][id] = fn
-			if ids.length is 1 then ids[0] else ids
+		@
 
 	once: (topics, fn) ->
 		@on(topics, fn, true)
 
-	off: (ids) ->
-		ids = utils.toArray(ids)
-		for id in ids
-			continue if typeof id isnt 'string'
-			topic = id.substr(0, id.lastIndexOf(';')).split(' ')[0]
-			delete @__observable.events[topic][id] if @__observable.events[topic]? and @__observable.events[topic][id]?
+	off: (obj) ->
+		if obj is undefined
+			@__observable.events = {}
+		else
+			for id in obj.__observable.ids
+				topic = id.substr(0, id.lastIndexOf(';')).split(' ')[0]
+				delete obj.__observable.events[topic][id] if obj.__observable.events[topic]
 		@
 
 	trigger: (topic, args) ->
