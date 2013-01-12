@@ -24,6 +24,7 @@ class Observable
 			@on(topic, fn, once) for topic, fn of topics
 		else
 			topics = utils.toArray(topics)
+			@__observable.ids.length = 0
 			for topic in topics
 				@__observable.lastIds[topic] ||= 0
 				id = "#{topic};#{++@__observable.lastIds[topic]}"
