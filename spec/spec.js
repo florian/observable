@@ -1,11 +1,13 @@
 (function() {
-  var A, eventSystemAvailable, events, lastIds;
+  var A, eventSystemAvailable, events, ids, lastIds;
 
   A = Observable();
 
   lastIds = A.__observable.lastIds;
 
   events = A.__observable.events;
+
+  ids = A.__observable.ids;
 
   eventSystemAvailable = function(obj) {
     expect(obj).to.have.property('__observable');
@@ -18,7 +20,8 @@
   describe('Observable', function() {
     afterEach(function() {
       lastIds = A.__observable.lastIds = {};
-      return events = A.__observable.events = {};
+      events = A.__observable.events = {};
+      return ids.length = 0;
     });
     it('should be a property of window', function() {
       return expect(window).to.have.property('Observable');
@@ -43,55 +46,30 @@
       it('should be a function', function() {
         return expect(A.on).to.be.a('function');
       });
-      it('should return an id when setting one topic', function() {
-        var id;
-        id = A.on('a', function() {});
-        expect(id).to.be.a('string');
-        return expect(id).to.contain('a;');
-      });
       it('should add the event to the store when setting one topic', function() {
-        var id;
-        id = A.on('a', function() {});
+        A.on('a', function() {});
         expect(events).to.have.property('a');
-        return expect(events.a[id]).to.be.a('function');
-      });
-      it('should return an array of ids when setting several topics', function() {
-        var ids;
-        ids = A.on(['a', 'b'], function() {});
-        expect(ids).to.be.an('array');
-        expect(ids[0]).to.contain('a;');
-        return expect(ids[1]).to.contain('b;');
+        return expect(events.a[ids[0]]).to.be.a('function');
       });
       it('should add the events to the store when setting several topics', function() {
-        var ids;
-        ids = A.on(['a', 'b'], function() {});
+        A.on(['a', 'b'], function() {});
         expect(events).to.have.keys('a', 'b');
         expect(events.a[ids[0]]).to.be.a('function');
         return expect(events.b[ids[1]]).to.be.a('function');
       });
-      it('should add the events to the store when setting with an object', function() {
+      return it('should add the events to the store when setting with an object', function() {
         A.on({
           a: function() {},
           b: function() {}
         });
         return expect(events).to.have.keys('a', 'b');
       });
-      return it('should return an array of ids when setting several topics', function() {
-        var ids;
-        ids = A.on({
-          a: function() {},
-          b: function() {}
-        });
-        expect(ids).to.be.an('array');
-        expect(ids[0]).to.contain('a;');
-        return expect(ids[1]).to.contain('b;');
-      });
     });
     describe('once', function() {
       return it('should return an ID that ends with " once"', function() {
         var id;
         id = A.once('a', function() {});
-        return expect(id).to.match(/\ once/);
+        return expect(ids[0]).to.match(/\ once/);
       });
     });
     describe('off', function() {
@@ -105,16 +83,16 @@
         return expect(events.a).to.not.have.property(id);
       });
       it('should remove an array of ids', function() {
-        var ids;
-        ids = A.on(['a', 'b'], function() {});
-        A.off(ids);
+        var o;
+        o = A.on(['a', 'b'], function() {});
+        A.off(o);
         expect(events.a).to.not.have.property(ids[0]);
         return expect(events.b).to.not.have.property(ids[1]);
       });
       it('should not throw an error when passing a non-existing topic', function() {
-        expect(A.off).not.to["throw"](Error);
+        A.__observable.ids.push('non-existing');
         return expect(function() {
-          return A.off('non-existing ID');
+          return A.off(A);
         }).not.to["throw"](Error);
       });
       it('should work with topics that contain semicolons', function() {
@@ -128,6 +106,10 @@
         id = A.once('a', function() {});
         A.off(id);
         return expect(events.a).not.to.have.property(id);
+      });
+      it('should remove all events when passing in 0 arguments', function() {
+        A.on(['a', 'b'], function() {}).off();
+        return expect(A.__observable.events).to.eql({});
       });
       return it('should return the parent object', function() {
         return expect(A.off()).to.equal(A);
