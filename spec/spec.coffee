@@ -1,37 +1,46 @@
-A = new Observable
+A = Observable()
 lastIds = A.__observable.lastIds
 events = A.__observable.events
+ids = A.__observable.ids
+
+eventSystemAvailable = (obj) ->
+	expect(obj).to.have.property('__observable')
+	expect(obj.on).to.be.a('function')
+	expect(obj.once).to.be.a('function')
+	expect(obj.trigger).to.be.a('function')
+	expect(obj.off).to.be.a('function')
 
 describe 'Observable', ->
 	afterEach ->
 		lastIds = A.__observable.lastIds = {}
 		events = A.__observable.events = {}
+		ids.length = 0
 
 	it 'should be a property of window', ->
 		expect(window).to.have.property('Observable')
+
+	describe 'constructor', ->
+		it 'should create a fresh object when passing 0 arguments', ->
+			_ = Observable()
+			expect(_).to.satisfy(eventSystemAvailable)
+
+		it 'should mixin the properties when passing in an object', ->
+			_ = a: 1
+			Observable(_)
+			expect(_).to.satisfy(eventSystemAvailable)
+			expect(_).to.have.property('a', 1)
 
 	describe 'on', ->
 		it 'should be a function', ->
 			expect(A.on).to.be.a('function')
 
-		it 'should return an id when setting one topic', ->
-			id = A.on 'a', ->
-			expect(id).to.be.a('string')
-			expect(id).to.contain('a;')
-
 		it 'should add the event to the store when setting one topic', ->
-			id = A.on 'a', ->
+			A.on 'a', ->
 			expect(events).to.have.property('a')
-			expect(events.a[id]).to.be.a('function')
-
-		it 'should return an array of ids when setting several topics', ->
-			ids = A.on ['a', 'b'], ->
-			expect(ids).to.be.an('array')
-			expect(ids[0]).to.contain('a;')
-			expect(ids[1]).to.contain('b;')
+			expect(events.a[ids[0]]).to.be.a('function')
 
 		it 'should add the events to the store when setting several topics', ->
-			ids = A.on ['a', 'b'], ->
+			A.on ['a', 'b'], ->
 			expect(events).to.have.keys('a', 'b')
 			expect(events.a[ids[0]]).to.be.a('function')
 			expect(events.b[ids[1]]).to.be.a('function')
@@ -42,18 +51,19 @@ describe 'Observable', ->
 				b: ->
 			expect(events).to.have.keys('a', 'b')
 
-		it 'should return an array of ids when setting several topics', ->
-			ids = A.on
-				a: ->
-				b: ->
-			expect(ids).to.be.an('array')
-			expect(ids[0]).to.contain('a;')
-			expect(ids[1]).to.contain('b;')
+		it 'should return the parent object with a special ids property', ->
+			ret = A.on 'a', ->
+			expect(ret.__observable).to.have.property('ids').with.length(1)
+
+		it 'should return the parent object with only the recent IDs', ->
+			A.on ['a', 'b'], ->
+			ret = A.on 'c', ->
+			expect(ret.__observable).to.have.property('ids').with.length(1)
 
 	describe 'once', ->
 		it 'should return an ID that ends with " once"', ->
 			id = A.once 'a', ->
-			expect(id).to.match(/\ once/)
+			expect(ids[0]).to.match(/\ once/)
 
 	describe 'off', ->
 		it 'should be a function', ->
@@ -65,14 +75,14 @@ describe 'Observable', ->
 			expect(events.a).to.not.have.property(id)
 
 		it 'should remove an array of ids', ->
-			ids = A.on ['a', 'b'], ->
-			A.off ids
+			o = A.on ['a', 'b'], ->
+			A.off o
 			expect(events.a).to.not.have.property(ids[0])
 			expect(events.b).to.not.have.property(ids[1])
 
 		it 'should not throw an error when passing a non-existing topic', ->
-			expect(A.off).not.to.throw(Error)
-			expect(-> A.off('non-existing ID')).not.to.throw(Error)
+			A.__observable.ids.push('non-existing')
+			expect(-> A.off(A)).not.to.throw(Error)
 
 		it 'should work with topics that contain semicolons', ->
 			id = A.on 'to;pic', ->
@@ -83,6 +93,10 @@ describe 'Observable', ->
 			id = A.once 'a', ->
 			A.off(id)
 			expect(events.a).not.to.have.property(id)
+
+		it 'should remove all events when passing in 0 arguments', ->
+			A.on(['a', 'b'], ->).off()
+			expect(A.__observable.events).to.eql({})
 
 		it 'should return the parent object', ->
 			expect(A.off()).to.equal(A)

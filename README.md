@@ -4,17 +4,31 @@ Observable is a JavaScript mixin for adding observer methods to a function. It's
 
 ## Usage
 
-You find the source at *lib/observable.js*. Observable supports AMD and CommonJS. Unless a AMD or CommonJS loader is present, it will be assigned to the global scope.
+You find the source at *[lib/observable.js](blob/master/lib/observable.js)*. Observable will be assigned to the global scope unless an AMD or CommonJS loader is present.
 
 ```js
-var $ = new Observable;
+// Mixin the methods
+Observable(Something)
+
+// Or mixin to the prototype
+Observable(Something.prototype)
+
+// Or create a new fresh object with the methods
+var $ = Observable()
 ```
 
-The methods that `$` gains are described in the following documentation.
+## Features
+
+- Easily mixin the methods into your library
+- It's ID based, so nobody will accidently remove internal events of your library
+- All methods are chainable
+- It's very well tested
 
 - - -
 
 # Documentation
+
+The object that gains the Observable methods will be called `$` for convenience.
 
 ## `on`: subscribing to events
 
@@ -24,27 +38,20 @@ You can watch a single event:
 var id = $.on('topic', fn);
 ```
 
-This will return a unique ID that you can use to stop observing the event, see `off` later.
-
 You can also watch several events at once:
 
 ```js
 var ids = $.on(['topic1', 'topic2'], fn);
 ```
 
-This will return an array of IDs.
-
-You can watch several events at once that need different handlers:
+Or watch several events at once that need different handlers:
 
 ```js
 var ids = $.on({
   topic1: fn,
-  topic2: fn
+  topic2: fn2
 });
 ```
-
-This will also return an array of IDs.
-
 
 ### `once`
 
@@ -56,7 +63,13 @@ $.trigger('topic'); // fn will be triggered
 $.trigger('topic'); // fn won't be triggered, event doesn't exist anymore
 ```
 
-## `trigger`: triggering events
+### IDs
+
+`on` / `once` will always return `$` itself, so you can use them for chaining. However the returned `$` will get a new internal property that contains the IDs of the subscribed functions.
+
+You can use these returned objects to unsubscribe from the events, see `off` later.
+
+## `trigger`: firing events
 
 Calling `.trigger('topic')` will execute all function subscribed to `'topic'`.
 
@@ -76,30 +89,34 @@ $.on('topic', function (arg1, arg2) {
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
 
-## `off`: unsubscribe events
+## `off`: unsubscribing from events
 
-This method accepts either a single ID or an array of IDs. That means you can just pass in the return value of any `.on` call.
+This method accepts the return value of `on` / `once` and will unsubscribe all the subscribed functions. You can also pass in an array of return values.
 
 ```js
+var id = $.on('topic', fn),
+    ids = $.on(['topic2', 'topic3'], fn2);
+
 $.off(id);
-$.off([id, id2]);
+$.off(ids);
 
-var id3 = $.on('a', fn);
-$.off(id3); // Removes the event above.
-
-var ids = $.on(['a', 'b'], fn);
-$.off(ids); // Removes the two events above.
+// You could also do
+$.off([id, ids]);
 ```
 
 ## Chaining
 
-`trigger` and `off` return the parent object so you can use chaining.
+All methods return the parent object so you can use chaining.
 
 ```js
-$.trigger('topic').off('topic');
+$.on('topic', fn).off('topic2').trigger('topic3');
 ```
 
 - - -
+
+## Projects that use Observable
+
+- [x18n](https://github.com/js-coder/x18n)
 
 ## Todo
 
