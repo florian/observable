@@ -17,11 +17,18 @@ Observable(Something.prototype)
 var $ = Observable()
 ```
 
-The methods that are added, are described in the following documentation. For convention the object that receives the new methods will be called `$`.
+## Features
+
+- Easily mixin the methods into your library
+- It's ID based, so nobody will accidently remove internal events of your library
+- All methods are chainable
+- It's very well tested
 
 - - -
 
 # Documentation
+
+The object that gains the Observable methods will be called `$` for convenience.
 
 ## `on`: subscribing to events
 
@@ -83,7 +90,7 @@ $.on('topic', function (arg1, arg2) {
 $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
 
-## `off`: unsubscribe events
+## `off`: unsubscribing from events
 
 This method accepts either a single ID or an array of IDs. That means you can just pass in the return value of any `.on` call.
 
@@ -105,3 +112,13 @@ $.off(ids); // Removes the two events above.
 ```js
 $.trigger('topic').off('topic');
 ```
+
+- - -
+
+## Projects that use Observable
+
+- [x18n](https://github.com/js-coder/x18n)
+
+## Todo
+
+- When a function is subscribed to several events and those events trigger at the same time the function should only be called once, because it might be an expensive operation. Maybe an extra option for this though, because it might not be the desired effect?
