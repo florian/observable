@@ -104,6 +104,12 @@ $.off(ids);
 $.off([id, ids]);
 ```
 
+You can call `off` without any arguments to remove all events. You should only do this if you know what you're doing!
+
+```js
+$.off();
+```
+
 ## Chaining
 
 All methods return the parent object so you can use chaining.
