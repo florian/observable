@@ -1,6 +1,6 @@
 {
 	"name": "Observable",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"private": true,
 	"devDependencies": {
 		"grunt": "~0.3",
