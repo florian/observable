@@ -1,0 +1,16 @@
+{
+  "name": "observable",
+  "repo": "js-coder/observable",
+  "description": "An event system for JavaScript libraries.",
+  "version": "1.2.0",
+  "keywords": [
+    "event",
+    "observer",
+    "emitter"
+  ],
+  "license": "MIT",
+  "scripts": [
+    "src/observable.js"
+  ],
+  "main": "src/observable.js"
+}
