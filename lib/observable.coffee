@@ -1,14 +1,14 @@
 class Observable
 
 	utils =
-		isPlainObject: (value) ->
-			!!value && Object::toString.call(value) is '[object Object]'
+		is: (type, value) ->
+			Object::toString.call(value).match(/\s(\w+)/)[1].toLowerCase() is type
 
-		isArray: (value) ->
-			Object::toString.call(value) is '[object Array]'
+		isPlainObject: (value) ->
+			!!value && utils.is('object', value)
 
 		toArray: (value) ->
-			if utils.isArray(value) then value else [value]
+			if utils.is('array', value) then value else [value]
 
 	constructor: (host = {}) ->
 		host.__observable =
