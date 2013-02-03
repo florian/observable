@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "scripts": [
-    "src/observable.js"
+    "lib/observable.js"
   ],
-  "main": "src/observable.js"
+  "main": "lib/observable.js"
 }
