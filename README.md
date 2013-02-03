@@ -23,6 +23,7 @@ var $ = Observable()
 - It's ID based, so nobody will accidently remove internal events of your library
 - All methods are chainable
 - It's very well tested
+- Node / NPM and [component](https://github.com/component/component) are supported
 
 - - -
 
