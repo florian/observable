@@ -124,7 +124,3 @@ $.on('topic', fn).off('topic2').trigger('topic3');
 ## Projects that use Observable
 
 - [x18n](https://github.com/js-coder/x18n)
-
-## Todo
-
-- When a function is subscribed to several events and those events trigger at the same time the function should only be called once, because it might be an expensive operation. Maybe an extra option for this though, because it might not be the desired effect?
