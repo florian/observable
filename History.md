@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 / 2013-02-03
+
+- Submitted observable to NPM and [component](https://github.com/component/component).
+
 ## 1.1.1 / 2013-02-03
 
 Just a fix for an RequireJS bug.
