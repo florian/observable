@@ -67,13 +67,13 @@
       it('should return the parent object with a special ids property', function() {
         var ret;
         ret = A.on('a', function() {});
-        return expect(ret.__observable).to.have.property('ids')["with"].length(1);
+        return expect(ret.__observable).to.have.property('ids')["with"].lengthOf(1);
       });
       return it('should return the parent object with only the recent IDs', function() {
         var ret;
         A.on(['a', 'b'], function() {});
         ret = A.on('c', function() {});
-        return expect(ret.__observable).to.have.property('ids')["with"].length(1);
+        return expect(ret.__observable).to.have.property('ids')["with"].lengthOf(1);
       });
     });
     describe('once', function() {
@@ -131,24 +131,19 @@
         return expect(A.trigger).to.be.a('function');
       });
       it('should trigger all the functions that are subscribed to the topic', function() {
-        var called;
-        called = [false, false];
-        A.on('a', function() {
-          return called[0] = true;
-        });
-        A.on('a', function() {
-          return called[1] = true;
-        });
-        A.trigger('a');
-        expect(called[0]).to.be["true"];
-        return expect(called[1]).to.be["true"];
+        var fn;
+        fn = chai.spy();
+        A.on('a', fn).on('a', fn).trigger('a');
+        return expect(fn).to.have.been.called.twice;
       });
       it('should pass the specified arguments', function() {
-        A.on('a', function(one, two) {
+        var fn;
+        fn = chai.spy(function() {
           expect(one).to.eql([1, 2]);
           return expect(two).to.be["true"];
         });
-        return A.trigger('a', [[1, 2], true]);
+        A.trigger('a', [[1, 2], true]);
+        return expect(fn).to.have.been.called;
       });
       it('should not throw an error when passing a non-existing topic', function() {
         expect(function() {

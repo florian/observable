@@ -53,12 +53,12 @@ describe 'Observable', ->
 
 		it 'should return the parent object with a special ids property', ->
 			ret = A.on 'a', ->
-			expect(ret.__observable).to.have.property('ids').with.length(1)
+			expect(ret.__observable).to.have.property('ids').with.lengthOf(1)
 
 		it 'should return the parent object with only the recent IDs', ->
 			A.on ['a', 'b'], ->
 			ret = A.on 'c', ->
-			expect(ret.__observable).to.have.property('ids').with.length(1)
+			expect(ret.__observable).to.have.property('ids').with.lengthOf(1)
 
 	describe 'once', ->
 		it 'should return an ID that ends with " once"', ->
@@ -106,18 +106,17 @@ describe 'Observable', ->
 			expect(A.trigger).to.be.a('function')
 
 		it 'should trigger all the functions that are subscribed to the topic', ->
-			called = [false, false]
-			A.on 'a', -> called[0] = true
-			A.on 'a', -> called[1] = true
-			A.trigger 'a'
-			expect(called[0]).to.be.true
-			expect(called[1]).to.be.true
+			fn = chai.spy()
+			A.on('a', fn).on('a', fn).trigger('a')
+			expect(fn).to.have.been.called.twice
 
 		it 'should pass the specified arguments', ->
-			A.on 'a', (one, two) ->
+			fn = chai.spy ->
 				expect(one).to.eql([1, 2])
 				expect(two).to.be.true
+			
 			A.trigger 'a', [[1, 2], true]
+			expect(fn).to.have.been.called
 
 		it 'should not throw an error when passing a non-existing topic', ->
 			expect(-> A.trigger()).not.to.throw(Error)
