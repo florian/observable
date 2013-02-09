@@ -74,7 +74,7 @@ You can use these returned objects to unsubscribe from the events, see `off` lat
 
 Calling `.trigger('topic')` will execute all function subscribed to `'topic'`.
 
-```
+```js
 $.on('topic', function () {
 	console.log('topic called');
 });
