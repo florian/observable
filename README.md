@@ -124,3 +124,7 @@ $.on('topic', fn).off('topic2').trigger('topic3');
 ## Projects that use Observable
 
 - [x18n](https://github.com/js-coder/x18n)
+
+## Observable ports
+
+- Python: [pyobservable](https://github.com/timofurrer/pyobservable) 
