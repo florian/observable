@@ -29,7 +29,7 @@ var $ = Observable()
 
 # Documentation
 
-The object that gains the Observable methods will be called `$` for convenience.
+The object that gains the observable methods will be called `$` for convenience.
 
 ## `on`: subscribing to events
 
@@ -121,6 +121,6 @@ $.on('topic', fn).off('topic2').trigger('topic3');
 
 - - -
 
-## Projects that use Observable
+## Projects that use observable
 
 - [x18n](https://github.com/js-coder/x18n)
