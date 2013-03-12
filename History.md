@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 / 2013-03-12
+
+Fix a `trigger` bug when passing no arguments.
+
 ## 1.2.0 / 2013-02-03
 
 - Submitted observable to NPM and [component](https://github.com/component/component).
