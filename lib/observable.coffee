@@ -46,7 +46,7 @@ class Observable
 				delete obj.__observable.events[topic][id] if obj.__observable.events[topic]
 		@
 
-	trigger: (topic, args) ->
+	trigger: (topic, args = []) ->
 		for id, fn of @__observable.events[topic]
 			fn(args...)
 			@off(id) if id.lastIndexOf(' once') is id.length - 1
