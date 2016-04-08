@@ -1,4 +1,4 @@
-# Observable – A JavaScript event system [![Build Status](https://travis-ci.org/js-coder/Observable.png)](https://travis-ci.org/js-coder/Observable)
+# Observable – A JavaScript event system [![Build Status](https://travis-ci.org/florian/Observable.png)](https://travis-ci.org/florian/Observable)
 
 Observable is a JavaScript mixin for adding observer methods to a function. It's similiar to the jQuery event system, but works with IDs. You can use it for your own JavaScript libraries.
 
@@ -123,8 +123,8 @@ $.on('topic', fn).off('topic2').trigger('topic3');
 
 ## Projects that use observable
 
-- [x18n](https://github.com/js-coder/x18n)
+- [x18n](https://github.com/florian/x18n)
 
 ## Observable ports
 
-- Python: [pyobservable](https://github.com/timofurrer/pyobservable) 
+- Python: [pyobservable](https://github.com/timofurrer/pyobservable)

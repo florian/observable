@@ -1,19 +1,19 @@
 {
-	"name": "observable",
+	"name": "observable_js",
 	"description": "An event system for JavaScript libraries.",
-	"version": "1.2.0",
-	"license": "MIT/X11",
-	"author": "Florian H. <jscoderr@gmail.com>",
+	"version": "1.2.1",
+	"license": "MIT",
+	"author": "Florian Hartmann <jscoderr@gmail.com>",
 	"main": "lib/observable.js",
 	"scripts": {
 		"test": "grunt test"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/js-coder/observable.git"
+		"url": "https://github.com/florian/observable.git"
 	},
 	"bugs": {
-		"url" : "http://github.com/js-coder/observable/issues"
+		"url" : "http://github.com/florian/observable/issues"
 	},
 	"devDependencies": {
 		"grunt": "~0.3",

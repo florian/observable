@@ -1,6 +1,6 @@
 {
   "name": "observable",
-  "repo": "js-coder/observable",
+  "repo": "florian/observable",
   "description": "An event system for JavaScript libraries.",
   "version": "1.2.0",
   "keywords": [
