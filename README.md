@@ -14,7 +14,7 @@ Observable(Something)
 Observable(Something.prototype)
 
 // Or create a new fresh object with the methods
-var $ = Observable()
+var x = Observable()
 ```
 
 ## Features
@@ -29,26 +29,26 @@ var $ = Observable()
 
 # Documentation
 
-The object that gains the observable methods will be called `$` for convenience.
+The object that gains the observable methods will be called `x` in this README for convenience.
 
 ## `on`: subscribing to events
 
 You can watch a single event:
 
 ```js
-var id = $.on('topic', fn);
+var id = x.on('topic', fn);
 ```
 
 You can also watch several events at once:
 
 ```js
-var ids = $.on(['topic1', 'topic2'], fn);
+var ids = x.on(['topic1', 'topic2'], fn);
 ```
 
 Or watch several events at once that need different handlers:
 
 ```js
-var ids = $.on({
+var ids = x.on({
   topic1: fn,
   topic2: fn2
 });
@@ -59,14 +59,14 @@ var ids = $.on({
 The `once` method behaves exactly like `on` and accepts the same arguments, but after triggering the event for the first time the event will be removed.
 
 ```js
-$.once('topic', fn);
-$.trigger('topic'); // fn will be triggered
-$.trigger('topic'); // fn won't be triggered, event doesn't exist anymore
+x.once('topic', fn);
+x.trigger('topic'); // fn will be triggered
+x.trigger('topic'); // fn won't be triggered, event doesn't exist anymore
 ```
 
 ### IDs
 
-`on` / `once` will always return `$` itself, so you can use them for chaining. However the returned `$` will get a new internal property that contains the IDs of the subscribed functions.
+`on` / `once` will always return `x` itself, so you can use them for chaining. However the returned `x` will get a new internal property that contains the IDs of the subscribed functions.
 
 You can use these returned objects to unsubscribe from the events, see `off` later.
 
@@ -75,19 +75,19 @@ You can use these returned objects to unsubscribe from the events, see `off` lat
 Calling `.trigger('topic')` will execute all function subscribed to `'topic'`.
 
 ```js
-$.on('topic', function () {
+x.on('topic', function () {
 	console.log('topic called');
 });
-$.trigger('topic'); // Logs 'topic called'
+x.trigger('topic'); // Logs 'topic called'
 ```
 
 You can also pass arguments to the subscribed functions by passing an array as the second argument:
 
 ```js
-$.on('topic', function (arg1, arg2) {
+x.on('topic', function (arg1, arg2) {
 	console.log(arg1, arg2);
 });
-$.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
+x.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 ```
 
 ## `off`: unsubscribing from events
@@ -95,20 +95,20 @@ $.trigger('topic', [[1, 2], true]); // Logs [1, 2] and true
 This method accepts the return value of `on` / `once` and will unsubscribe all the subscribed functions. You can also pass in an array of return values.
 
 ```js
-var id = $.on('topic', fn),
-    ids = $.on(['topic2', 'topic3'], fn2);
+var id = x.on('topic', fn),
+    ids = x.on(['topic2', 'topic3'], fn2);
 
-$.off(id);
-$.off(ids);
+x.off(id);
+x.off(ids);
 
 // You could also do
-$.off([id, ids]);
+x.off([id, ids]);
 ```
 
 You can call `off` without any arguments to remove all events. You should only do this if you know what you're doing!
 
 ```js
-$.off();
+x.off();
 ```
 
 ## Chaining
@@ -116,7 +116,7 @@ $.off();
 All methods return the parent object so you can use chaining.
 
 ```js
-$.on('topic', fn).off('topic2').trigger('topic3');
+x.on('topic', fn).off('topic2').trigger('topic3');
 ```
 
 - - -
