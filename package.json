@@ -1,23 +1,24 @@
 {
-	"name": "observable_js",
-	"description": "An event system for JavaScript libraries.",
-	"version": "1.2.1",
-	"license": "MIT",
-	"author": "Florian Hartmann <jscoderr@gmail.com>",
-	"main": "lib/observable.js",
-	"scripts": {
-		"test": "grunt test"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/florian/observable.git"
-	},
-	"bugs": {
-		"url" : "http://github.com/florian/observable/issues"
-	},
-	"devDependencies": {
-		"grunt": "~0.3",
-		"grunt-contrib-coffee": "~0.3",
-		"grunt-mocha": "~0.1"
-	}
+  "name": "observable_js",
+  "description": "An event system for JavaScript libraries.",
+  "version": "1.2.1",
+  "license": "MIT",
+  "author": "Florian Hartmann <jscoderr@gmail.com>",
+  "main": "lib/observable.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/florian/observable.git"
+  },
+  "bugs": {
+    "url": "http://github.com/florian/observable/issues"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-mocha": "^1.0.1"
+  }
 }
