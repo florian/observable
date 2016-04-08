@@ -121,7 +121,7 @@ $.on('topic', fn).off('topic2').trigger('topic3');
 
 - - -
 
-## Projects that use observable
+## Projects that use Observable
 
 - [x18n](https://github.com/florian/x18n)
 
