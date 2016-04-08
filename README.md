@@ -1,4 +1,4 @@
-# Observable – A JavaScript event system [![Build Status](https://travis-ci.org/florian/Observable.png)](https://travis-ci.org/florian/Observable)
+# Observable – A JavaScript event system [![Build Status](https://travis-ci.org/florian/observable.png)](https://travis-ci.org/florian/observable)
 
 Observable is a JavaScript mixin for adding observer methods to a function. It's similiar to the jQuery event system, but works with IDs. You can use it for your own JavaScript libraries.
 
