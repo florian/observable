@@ -11,7 +11,7 @@ class Observable
 	constructor: ->
 		@__eventStore = {}
 
-	mixin: (host) ->
+	@mixin: (host) ->
 		host.__eventStore = {}
 		host[key] = fn for key, fn of Observable.prototype
 
@@ -38,11 +38,18 @@ class Observable
 			@off(topic, fn) for topic, fn of topics
 		else
 			for topic in toArray(topics)
-				@__eventStore[topic] = @__eventStore[topic].filter((subscriber) -> subscriber.fn isnt fn)
+				@__eventStore[topic] = (@__eventStore[topic] or []).filter((subscriber) -> subscriber.fn isnt fn)
 		@
 
 	trigger: (topic, args) ->
-		@__eventStore[topic].forEach ({ fn, once }) =>
+		@__eventStore[topic]?.forEach ({ fn, once }) =>
 			fn(args...)
 			@off(topic, fn) if once
 		@
+
+if typeof define is 'function' and define.amd
+		define 'observable', [], -> Observable
+else if typeof exports isnt 'undefined'
+		module.exports = Observable
+else
+		window.Observable = Observable
