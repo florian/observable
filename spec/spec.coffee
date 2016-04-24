@@ -81,6 +81,12 @@ describe 'Observable', ->
 			A.off 'a', a
 			expect(eventAmount('a')).to.eql(0)
 
+		it 'should be able to unsubscribe from all chained subscribtions', ->
+			a = ->
+			b = ->
+			A.on('a', a).on('a', b).off('a', a).off('a', b)
+			expect(eventAmount('a')).to.eql(0)
+
 		it 'should remove all events when passing in 0 arguments', ->
 			A.on 'a', ->
 			A.on 'a', ->
@@ -91,6 +97,7 @@ describe 'Observable', ->
 
 		it 'should return the parent object', ->
 			expect(A.off()).to.equal(A)
+			expect(A.off('x')).to.equal(A)
 
 	describe 'trigger', ->
 		it 'should be a function', ->

@@ -101,6 +101,13 @@
         A.off('a', a);
         return expect(eventAmount('a')).to.eql(0);
       });
+      it('should be able to unsubscribe from all chained subscribtions', function() {
+        var a, b;
+        a = function() {};
+        b = function() {};
+        A.on('a', a).on('a', b).off('a', a).off('a', b);
+        return expect(eventAmount('a')).to.eql(0);
+      });
       it('should remove all events when passing in 0 arguments', function() {
         A.on('a', function() {});
         A.on('a', function() {});
@@ -110,7 +117,8 @@
         return expect(eventAmount('a')).to.eql(0);
       });
       return it('should return the parent object', function() {
-        return expect(A.off()).to.equal(A);
+        expect(A.off()).to.equal(A);
+        return expect(A.off('x')).to.equal(A);
       });
     });
     return describe('trigger', function() {
