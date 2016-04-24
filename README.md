@@ -22,6 +22,9 @@ Other usages:
 // Adding the Observable methods to an existing object:
 Observable.mixin(a)
 
+// Add the methods to the prototype of a constructor function
+Observable.mixin(Constructor.prototype)
+
 // Create a new object that has all the Observable methods
 var a = new Observable()
 ```
