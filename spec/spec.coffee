@@ -1,4 +1,5 @@
 A = new Observable()
+A.__asyncEvents = false
 events = A.__eventStore
 
 eventSystemAvailable = (obj) ->

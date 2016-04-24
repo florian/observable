@@ -10,6 +10,7 @@ toArray = (value) ->
 class Observable
 	constructor: ->
 		@__eventStore = {}
+		@__asyncEvents = true
 
 	@mixin: (host) ->
 		host.__eventStore = {}
@@ -43,7 +44,11 @@ class Observable
 
 	trigger: (topic, args) ->
 		@__eventStore[topic]?.forEach ({ fn, once }) =>
-			fn(args...)
+			if @__asyncEvents
+				setTimeout (-> fn(args...)), 1
+			else
+				fn(args...)
+
 			@off(topic, fn) if once
 		@
 
