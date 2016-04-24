@@ -1,34 +1,35 @@
-A = Observable()
-lastIds = A.__observable.lastIds
-events = A.__observable.events
-ids = A.__observable.ids
+A = new Observable()
+events = A.__eventStore
 
 eventSystemAvailable = (obj) ->
-	expect(obj).to.have.property('__observable')
 	expect(obj.on).to.be.a('function')
 	expect(obj.once).to.be.a('function')
 	expect(obj.trigger).to.be.a('function')
 	expect(obj.off).to.be.a('function')
+	expect(obj.__eventStore).to.be.an('object')
+
+eventAmount = (topic) ->
+	(events[topic] or []).length
 
 describe 'Observable', ->
 	afterEach ->
-		lastIds = A.__observable.lastIds = {}
-		events = A.__observable.events = {}
-		ids.length = 0
+		events = A.__eventStore = {}
 
 	it 'should be a property of window', ->
 		expect(window).to.have.property('Observable')
 
 	describe 'constructor', ->
 		it 'should create a fresh object when passing 0 arguments', ->
-			_ = Observable()
+			_ = new Observable()
 			expect(_).to.satisfy(eventSystemAvailable)
 
-		it 'should mixin the properties when passing in an object', ->
+
+	describe 'mixin', ->
+		it 'it should be able to mixin the prototype to other objects', ->
 			_ = a: 1
-			Observable(_)
+			Observable.mixin(_)
 			expect(_).to.satisfy(eventSystemAvailable)
-			expect(_).to.have.property('a', 1)
+			expect(_).to.have.property('a')
 
 	describe 'on', ->
 		it 'should be a function', ->
@@ -37,13 +38,10 @@ describe 'Observable', ->
 		it 'should add the event to the store when setting one topic', ->
 			A.on 'a', ->
 			expect(events).to.have.property('a')
-			expect(events.a[ids[0]]).to.be.a('function')
 
 		it 'should add the events to the store when setting several topics', ->
 			A.on ['a', 'b'], ->
 			expect(events).to.have.keys('a', 'b')
-			expect(events.a[ids[0]]).to.be.a('function')
-			expect(events.b[ids[1]]).to.be.a('function')
 
 		it 'should add the events to the store when setting with an object', ->
 			A.on
@@ -51,52 +49,44 @@ describe 'Observable', ->
 				b: ->
 			expect(events).to.have.keys('a', 'b')
 
-		it 'should return the parent object with a special ids property', ->
-			ret = A.on 'a', ->
-			expect(ret.__observable).to.have.property('ids').with.lengthOf(1)
-
-		it 'should return the parent object with only the recent IDs', ->
-			A.on ['a', 'b'], ->
-			ret = A.on 'c', ->
-			expect(ret.__observable).to.have.property('ids').with.lengthOf(1)
-
 	describe 'once', ->
-		it 'should return an ID that ends with " once"', ->
-			id = A.once 'a', ->
-			expect(ids[0]).to.match(/\ once/)
+		it 'it should save subscribers and mark them as "once"', ->
+			A.once 'a', ->
+			expect(events.a[0].once).to.be.true
 
 	describe 'off', ->
 		it 'should be a function', ->
 			expect(A.off).to.be.a('function')
 
 		it 'should be able to remove a single topic', ->
-			id = A.on 'a', ->
-			A.off id
-			expect(events.a).to.not.have.property(id)
+			a = ->
+			A.on 'a', a
+			A.off 'a', a
+			expect(eventAmount('a')).to.eql(0)
 
 		it 'should remove an array of ids', ->
-			o = A.on ['a', 'b'], ->
-			A.off o
-			expect(events.a).to.not.have.property(ids[0])
-			expect(events.b).to.not.have.property(ids[1])
+			a = ->
+			A.on ['a', 'b'], a
+			A.off ['a', 'b'], a
+			expect(eventAmount('a')).to.eql(0)
+			expect(eventAmount('b')).to.eql(0)
 
 		it 'should not throw an error when passing a non-existing topic', ->
-			A.__observable.ids.push('non-existing')
-			expect(-> A.off(A)).not.to.throw(Error)
-
-		it 'should work with topics that contain semicolons', ->
-			id = A.on 'to;pic', ->
-			A.off(id)
-			expect(events['to;pic']).not.to.have.property(id)
+			expect(-> A.off('nonexisting')).not.to.throw(Error)
 
 		it 'should be able to remove topics that were set using once', ->
-			id = A.once 'a', ->
-			A.off(id)
-			expect(events.a).not.to.have.property(id)
+			a = ->
+			A.once 'a', a
+			A.off 'a', a
+			expect(eventAmount('a')).to.eql(0)
 
 		it 'should remove all events when passing in 0 arguments', ->
-			A.on(['a', 'b'], ->).off()
-			expect(A.__observable.events).to.eql({})
+			A.on 'a', ->
+			A.on 'a', ->
+			A.on 'a', ->
+			A.on 'a', ->
+			A.off('a')
+			expect(eventAmount('a')).to.eql(0)
 
 		it 'should return the parent object', ->
 			expect(A.off()).to.equal(A)
@@ -105,16 +95,49 @@ describe 'Observable', ->
 		it 'should be a function', ->
 			expect(A.trigger).to.be.a('function')
 
+		it 'should trigger functions that were subscribed alone', ->
+			fn = chai.spy()
+			A.on('a', fn).trigger('a')
+			expect(fn).to.have.been.called
+
+		it 'should trigger functions that were subscribed to several topics', ->
+			fn = chai.spy()
+			A.on(['a', 'b'], fn).trigger('a')
+			expect(fn).to.have.been.called
+
+		it 'should trigger functions that were subscribed to several topics for all topics', ->
+			fn = chai.spy()
+			A.on(['a', 'b'], fn).trigger('a').trigger('b')
+			expect(fn).to.have.been.called.twice
+
+		it 'should trigger functions that were subscribed using an object', ->
+			f = chai.spy()
+			g = chai.spy()
+
+			A.on(a: f, b: g).trigger('a')
+			expect(f).to.have.been.called
+
+			A.trigger('b')
+			expect(g).to.have.been.called
+
+		it 'should call a function everytime a subscribed event is triggered', ->
+			f = chai.spy()
+			A.on('a', f)
+			A.trigger('a') for i in [1..10]
+
+			expect(f).to.have.been.called(10).times
+
 		it 'should trigger all the functions that are subscribed to the topic', ->
 			fn = chai.spy()
 			A.on('a', fn).on('a', fn).trigger('a')
 			expect(fn).to.have.been.called.twice
 
 		it 'should pass the specified arguments', ->
-			fn = chai.spy ->
+			fn = chai.spy (one, two) ->
 				expect(one).to.eql([1, 2])
 				expect(two).to.be.true
-			
+
+			A.on 'a', fn
 			A.trigger 'a', [[1, 2], true]
 			expect(fn).to.have.been.called
 
@@ -123,12 +146,9 @@ describe 'Observable', ->
 			expect(-> A.trigger("non-existing topic")).not.to.throw(Error)
 
 		it 'should remove topics set using once after firing them', ->
-			id = A.once 'a', ->
+			A.once 'a', ->
 			A.trigger 'a'
-			expect(events).not.to.have.property(id)
+			expect(eventAmount('a')).to.eql(0)
 
 		it 'should return the parent object', ->
-			expect(A.trigger()).to.equal(A)
-
-			id = A.on 'a', ->
-			expect(A.trigger(id)).to.equal(A)
+			expect(A.trigger('x')).to.equal(A)
