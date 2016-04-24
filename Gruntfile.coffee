@@ -21,12 +21,13 @@ module.exports = (grunt) ->
 				run: true
 
 		watch:
-			files: ['lib/observable.coffee', 'spec/*']
+			files: ['lib/observable.coffee', 'spec/*.coffee']
 			tasks: 'coffee'
 
 		grunt.loadNpmTasks('grunt-contrib-coffee')
 		grunt.loadNpmTasks('grunt-mocha')
 		grunt.loadNpmTasks('grunt-contrib-concat')
+		grunt.loadNpmTasks('grunt-contrib-watch')
 
 		grunt.registerTask('test', 'mocha')
 		grunt.registerTask('release', ['coffee', 'concat', 'mocha'])
