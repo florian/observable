@@ -1,61 +1,41 @@
+isType =  (type, value) ->
+	Object::toString.call(value).match(/\s(\w+)/)[1].toLowerCase() is type
+
+isPlainObject =  (value) ->
+	!!value && isType('object', value)
+
+toArray = (value) ->
+	if isType('array', value) then value else [value]
+
 class Observable
+	constructor: ->
+		@__eventStore = {}
 
-	utils =
-		is: (type, value) ->
-			Object::toString.call(value).match(/\s(\w+)/)[1].toLowerCase() is type
-
-		isPlainObject: (value) ->
-			!!value && utils.is('object', value)
-
-		toArray: (value) ->
-			if utils.is('array', value) then value else [value]
-
-	constructor: (host = {}) ->
-		host.__observable =
-			lastIds: {}
-			events: {}
-			ids: []
-		host[key] = fn for key, fn of Observable.prototype
-		return host
-
-	on: (topics, fn, once) ->
-		if utils.isPlainObject(topics)
-			once = fn
-			@on(topic, fn, once) for topic, fn of topics
+	on:  (topics, fn, once = false) ->
+		if isPlainObject(topics)
+			@on(topic, fn) for topic, fn of topics
 		else
-			topics = utils.toArray(topics)
-			@__observable.ids.length = 0
-			for topic in topics
-				@__observable.lastIds[topic] ||= 0
-				id = "#{topic};#{++@__observable.lastIds[topic]}"
-				id += ' once' if once
-				@__observable.ids.push(id)
-				@__observable.events[topic] ||= {}
-				@__observable.events[topic][id] = fn
+			for topic in toArray(topics)
+				@__eventStore[topic] or= []
+				@__eventStore[topic].push({ fn, once })
 		@
 
 	once: (topics, fn) ->
-		@on(topics, fn, true)
-
-	off: (obj) ->
-		if obj is undefined
-			@__observable.events = {}
+		if fn
+			@on(topics, fn, true)
 		else
-			for id in obj.__observable.ids
-				topic = id.substr(0, id.lastIndexOf(';')).split(' ')[0]
-				delete obj.__observable.events[topic][id] if obj.__observable.events[topic]
+			@on(topics, true)
+
+	off: (topics, fn) ->
+		if isPlainObject(topics)
+			@off(topic, fn) for topic, fn of topics
+		else
+			for topic in toArray(topics)
+				@__eventStore[topic] = @__eventStore[topic].filter((subscriber) -> subscriber.fn isnt fn)
 		@
 
-	trigger: (topic, args = []) ->
-		for id, fn of @__observable.events[topic]
+	trigger: (topic, args) ->
+		@__eventStore[topic].forEach ({ fn, once }) =>
 			fn(args...)
-			@off(id) if id.lastIndexOf(' once') is id.length - 1
+			@off(topic, fn) if once
 		@
-
-
-if typeof define is 'function' and define.amd
-	define 'observable', [], -> Observable
-else if typeof exports isnt 'undefined'
-	module.exports = Observable
-else
-	window.Observable = Observable
