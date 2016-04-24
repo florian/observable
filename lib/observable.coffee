@@ -11,6 +11,10 @@ class Observable
 	constructor: ->
 		@__eventStore = {}
 
+	mixin: (host) ->
+		host.__eventStore = {}
+		host[key] = fn for key, fn of Observable.prototype
+
 	on:  (topics, fn, once = false) ->
 		if isPlainObject(topics)
 			@on(topic, fn) for topic, fn of topics
@@ -27,6 +31,9 @@ class Observable
 			@on(topics, true)
 
 	off: (topics, fn) ->
+		if not fn
+			for topic in toArray(topics)
+				@__eventStore[topic] = []
 		if isPlainObject(topics)
 			@off(topic, fn) for topic, fn of topics
 		else
