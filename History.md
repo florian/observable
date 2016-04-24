@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0 / 2016-04-24
+
+- Complete rewrite, fixing all issues the library had so far
+- It's not ID based anymore, making it a lot more predictable
+- `.on` and `.off` now accept the exact same arguments, meaning you can
+  unsubscribe the same way you subscribed
+- Events are triggered async by default now, can be disabled using `x.__asyncEvents = false`
+
 ## 1.2.1 / 2013-03-12
 
 Fix a `trigger` bug when passing no arguments.
