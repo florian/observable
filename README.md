@@ -17,6 +17,8 @@ CoffeeScript:
 class MyLibrary extends Observable
 ```
 
+(Don't forget to call `super` if your extended ES6/CoffeeScript class has its own constructor function.)
+
 Other usages:
 ```js
 // Adding the Observable methods to an existing object:
