@@ -43,6 +43,8 @@ class Observable
 		@
 
 	trigger: (topic, args) ->
+		args or= []
+
 		@__eventStore[topic]?.forEach ({ fn, once }) =>
 			if @__asyncEvents
 				setTimeout (-> fn(args...)), 1
