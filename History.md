@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.0.1 / 2016-04-25
+
+Fix IE8 bug
+
 ## 2.0.0 / 2016-04-24
 
 - Complete rewrite, fixing all issues the library had so far
