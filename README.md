@@ -50,19 +50,19 @@ The object that gains the observable methods will be called `x` in this README f
 You can watch a single event:
 
 ```js
-var id = x.on('topic', fn);
+x.on('topic', fn);
 ```
 
 You can also watch several events at once:
 
 ```js
-var ids = x.on(['topic1', 'topic2'], fn);
+x.on(['topic1', 'topic2'], fn);
 ```
 
 Or watch several events at once that need different handlers:
 
 ```js
-var ids = x.on({
+x.on({
   topic1: fn,
   topic2: fn2
 });
